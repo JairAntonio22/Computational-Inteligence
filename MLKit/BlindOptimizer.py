@@ -1,5 +1,4 @@
 import numpy as np
-from pprint import pprint
 
 from Model import Model
 from Optimizer import Optimizer
@@ -41,18 +40,12 @@ class BlindOptimizer(Optimizer):
             model.weights = child
             scores.append(model.score(X, y))
 
-        scores = np.array(scores)
-        return scores
+        return np.array(scores)
 
     def run(self, model, X, y):
         for _ in range(self.n_gens):
             parent = self.parents[np.random.randint(self.n_parents)]
             children = self.mutate(parent)
-
-            print('parents')
-            print(self.parents)
-            print('children')
-            print(children)
 
             if self.overlap:
                 children = np.append(children, self.parents, axis=0)
@@ -65,11 +58,12 @@ class BlindOptimizer(Optimizer):
 
             for i, (_, child) in enumerate(children):
                 if i < self.n_parents:
-                    self.parents.append(np.array([child]))
+                    self.parents.append(child)
                 else:
                     break
 
-            self.paretns = np.array(self.parents)
+            self.parents = np.array(self.parents)
+            self.best_parents.append(parent)
 
         model.weights = self.parents[0]
         return model

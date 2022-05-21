@@ -2,14 +2,13 @@ import random
 import sys
 sys.path.append('MLKit')
 
+import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
 
 import MLKit
 
 if __name__ == '__main__':
-    random.seed(0)
-
     st.sidebar.title('Dataset generation')
 
     dataset_size = st.sidebar.slider('dataset size', 1, 100, 30)
@@ -18,7 +17,7 @@ if __name__ == '__main__':
     slope = st.sidebar.slider('slope', -5.0, 5.0, 1.0)
     x_domain = 10
 
-    data = [[random.uniform(-x_domain, x_domain)] for x in range(dataset_size)]
+    data = np.random.uniform(-x_domain, x_domain, (dataset_size, 1))
     labels = [
         intercept + slope * value[0] + random.uniform(-noise_factor, noise_factor)
         for value in data
@@ -49,7 +48,7 @@ if __name__ == '__main__':
     r_slope = regressor.weights[1]
 
     st.write('Solution found')
-    st.latex(f'h(x) = {r_intercept: 3.2f} + {r_slope: 3.2f} \cdot x')
+    st.latex(f'f(x) = {r_intercept: 3.2f} + {r_slope: 3.2f} \cdot x')
 
     st.write('Score')
     st.latex(f'R^2 \\approx {score: 8.4}')
@@ -58,22 +57,15 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
 
-    dx = (2 * x_domain) / 10
-    x = -x_domain
-    X = []
-
-    while x <= x_domain:
-        X.append([x])
-        x += dx
-
+    X = np.linspace([-x_domain], [x_domain])
     Y = regressor.predict(X)
 
     plt.title('Regression')
     plt.ylabel('x')
     plt.xlabel('y')
 
-    ax.plot(X, Y)
     ax.scatter(data, labels)
+    ax.plot(X, Y, c='r')
 
     col1.pyplot(fig)
 

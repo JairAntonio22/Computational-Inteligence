@@ -1,15 +1,15 @@
 
 ''' ===== Machine Learning Models =====  '''
 
-from . Model import Model
-
-from . LinearRegression import LinearRegression
-from . LogisticRegression import LogisticRegression
+from . Model import (
+    Model,
+    LinearRegression
+)
 
 
 ''' ===== Optimizer Algorithms =====  '''
 
-from . Optimizer import Optimizer
-
-from . BlindOptimizer import BlindOptimizer
-from . PSOptimizer import PSOptimizer
+from . Optimizer import (
+    Optimizer,
+    BlindOptimizer
+)

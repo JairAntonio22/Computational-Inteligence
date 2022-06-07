@@ -34,18 +34,22 @@ if __name__ == '__main__':
         overlap = st.sidebar.checkbox('generational overlap', True)
     )
 
-    regressor = optimizer.run(MLKit.LinearRegression(1), data, labels)
-    score = regressor.score(data, labels)
+    model = MLKit.LogisticRegression(
+        n_dims = 1,
+        can_scale=True,
+        can_translate=True
+    )
 
-    st.title('Linear Regressor')
-    st.write('Model to train')
-    st.latex('h(x_i, \\beta) = \\beta_0 + \\sum_{i=1}^n \\beta_i \cdot x_i ')
+    model = optimizer.run(model, data, labels)
+    score = model.score(data, labels)
+
+    st.title('Linear model')
 
     st.write('Original function')
     st.latex(f'f(x) = {intercept: 3.2f} + {slope: 3.2f} \cdot x')
 
-    r_intercept = regressor.weights[0]
-    r_slope = regressor.weights[1]
+    r_intercept = model.weights[0]
+    r_slope = model.weights[1]
 
     st.write('Solution found')
     st.latex(f'f(x) = {r_intercept: 3.2f} + {r_slope: 3.2f} \cdot x')
@@ -58,11 +62,11 @@ if __name__ == '__main__':
     fig, ax = plt.subplots()
 
     X = np.linspace([-x_domain], [x_domain])
-    Y = regressor.predict(X)
+    Y = model.predict(X)
 
     plt.title('Regression')
-    plt.ylabel('x')
-    plt.xlabel('y')
+    plt.ylabel('y')
+    plt.xlabel('x')
 
     ax.scatter(data, labels)
     ax.plot(X, Y, c='r')

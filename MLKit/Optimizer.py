@@ -23,13 +23,9 @@ class BlindOptimizer(Optimizer):
         self.n_gens = n_gens
         self.n_parents = n_parents
         self.n_children = n_children
-        self.child_size = len(domain)
         self.mut_factor = mut_factor
         self.domain = domain
         self.overlap = overlap
-        self.parents = np.random.uniform(
-            domain[0], domain[1], (self.n_parents, self.child_size)
-        )
         self.best_parents = []
 
     def mutate(self, parent):
@@ -48,6 +44,11 @@ class BlindOptimizer(Optimizer):
         return np.array(scores)
 
     def run(self, model, X, y):
+        self.child_size = len(model.weights)
+        self.parents = np.random.uniform(
+            self.domain[0], self.domain[1], (self.n_parents, self.child_size)
+        )
+
         for _ in range(self.n_gens):
             parent = self.parents[np.random.randint(self.n_parents)]
             children = self.mutate(parent)

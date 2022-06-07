@@ -3,7 +3,8 @@
 
 from . Model import (
     Model,
-    LinearRegression
+    LinearRegression,
+    LogisticRegression
 )
 
 
